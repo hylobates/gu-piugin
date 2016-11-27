@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>bullbox</title>
+	<style type="text/css">
+		.btn{
+			width: 100px;
+			height: 100px;
+			border: 1px solid;
+		}
+
+		/*框样式*/
+		.point-box{
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			height: 40%;
+			transform: translate(-50%,-50%);
+			width: 200px;
+			background: #fff;
+			border-radius: 20%;
+			box-shadow: 0 0 3px rgba(0,0,0,.3);
+			font-size: 16px;
+			font-family: "Micsocoft YaHei";
+			text-align: center;
+			background-color: #fff;
+		}
+		.point-box>.point-title{
+			font-size:22px;
+			font-weight: 700;
+		}
+		.point-box>.point-title{
+			font-size:22px;
+			font-weight: 700;
+		}
+		.point-btn{
+			border-top: 1px solid #ccc;
+			width: 100%;
+			height: 30%;
+		}
+		.point-btn button{
+			width: 40%;
+			height: 80%;
+			color: #3f3f3f;
+			border-radius: 20px;
+			font-size: 18px;
+			font-weight: 500;
+			margin: 10px;
+			outline: none;
+			cursor: pointer;
+			background-color: #f7f7f7;
+			border: none;
+			box-shadow: 0 0 3px rgba(0,0,0,.3);
+		}
+	</style>
+
+	<script type="text/javascript" src="../../plu/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+	/*
+	添加jQ方法
+	块函数，功能块
+	(function ($) {})(jQuery)里面装的是新增的jq方法块/功能块
+	如：$.create = function(){}
+	*/
+	(function ($) {
+		// 创建提示框的方法
+		$.creatPoinBox = function(newBtn) {
+
+			//默认点击事件：返回true、false
+			var mouseEven = {
+				//确认
+				onEven:function () {
+					return "aa";
+				},
+				//取消
+				offEven:function () {
+					return "bb";
+				}
+
+			}
+
+			//this => jQuery
+			/*
+				newBtn的默认值_defluat
+				作用：不传入newBtn时候仍然能执行默认设置
+			*/
+			var _defluat = {
+				ele:$(".btn"),
+				title:"温馨提示",
+				con:"登录成功！",
+				btn:[{
+					con:"确认",
+					even:function (data) {
+						console.log(data);
+					}
+				},{
+					con:"取消",
+					even:function (data) {
+						console.log(data);
+					}
+				}]
+			}
+			//opt为最终整合的传入数据
+			/*
+				没有传入数据会报错
+				传入字符串为设置内容
+				传入对象则为整合
+				传入其他的为默认设置
+			*/
+			var opt = _defluat;
+			if (typeof newBtn == 'string') {
+				opt.con = newBtn;
+			}else{
+				//传入的参数与默认的参数进行整合
+				opt = $.extend(_defluat,newBtn);
+			}
+			
+			var $html = '';//弹框
+			var $btns = '';//按钮
+
+			
+
+			// 创建最终的提示框
+			$html += '<div class="point-box"><h3 class="point-title">'+ opt.title + '</h3><p class="point-con">' + opt.con + '</p><div class="point-btn"></div>';
+			console.log($html)
+			$($html).appendTo('body');
+
+
+			// 传入btn对象的处理
+			$.each(opt.btn, function (i, btn) {
+				var $btn = $('<button>'+ btn.con +"</button>").appendTo('.point-btn');
+				$btn.on("click",function(){
+					 btn.even(mouseEven)
+				})
+			})
+			
+		}
+	})(jQuery)
+
+
+	$(function () {
+		//点击动作
+		$(".btn").on("click",function () {
+			var newBtn = {
+				ele:$(".btn"),
+				title:"警报",
+				con:"密码错误！！！！",
+				btn:[{
+					con:"on",
+					even:function (data) {
+						console.log(data.onEven());
+					}
+				},{
+					con:"off",
+					even:function (data) {
+						console.log(data.offEven());
+					}
+				}]
+			}
+			$.creatPoinBox(newBtn)
+		})
+	})
+
+
+
+	
+	</script>
+</head>
+<body>
+	<div class="btn">tan</div>
+	<!-- <div class="point-box">
+		<h3 class="point-title">title</h3>
+		<p class="point-con">con</p>
+		<div class="point-btn">
+			<button>确定</button>
+		</div>
+	</div> -->
+</body>
+</html>
